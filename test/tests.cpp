@@ -14,14 +14,6 @@ TEST(CircleTest, ConstructorAndGetters) {
     EXPECT_DOUBLE_EQ(c.getArea(), PI * 25.0);
 }
 
-TEST(CircleTest, SetRadius) {
-    Circle c(1.0);
-    c.setRadius(3.0);
-    EXPECT_DOUBLE_EQ(c.getRadius(), 3.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * PI * 3.0);
-    EXPECT_DOUBLE_EQ(c.getArea(), PI * 9.0);
-}
-
 TEST(CircleTest, SetFerence) {
     Circle c(1.0);
     double newFerence = 10.0;

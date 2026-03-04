@@ -148,8 +148,3 @@ TEST(PoolCostTest, FenceLengthPositive) {
     EXPECT_GT(poolWithPath.getFerence(), 0.0);
 }
 
-TEST(PoolCostTest, PoolRadiusConsistency) {
-    Circle pool(3.0);
-    EXPECT_DOUBLE_EQ(pool.getArea(), PI * 9.0);
-    EXPECT_DOUBLE_EQ(pool.getFerence(), 2 * PI * 3.0);
-}

@@ -3,7 +3,6 @@
 #define INCLUDE_CIRCLE_H_
 
 class Circle {
-
  private:
     double radius;
     double ference;

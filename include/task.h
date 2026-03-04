@@ -5,6 +5,5 @@
 double calculateEarthGap();
 double calculatePoolCost();
 
-
 #endif  // INCLUDE_TASKS_H_
 

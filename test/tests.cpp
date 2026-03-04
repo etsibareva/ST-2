@@ -151,3 +151,4 @@ TEST(PoolCostTest, FenceLengthPositive) {
     Circle poolWithPath(4.0);
     EXPECT_GT(poolWithPath.getFerence(), 0.0);
 }
+

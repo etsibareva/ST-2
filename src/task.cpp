@@ -28,3 +28,4 @@ double calculatePoolCost() {
     
     return concreteCost + fenceCost;
 }
+

@@ -28,3 +28,4 @@ install(TARGETS ${PROJECT_NAME}.info
         RUNTIME DESTINATION "${tool_dest}"
     COMPONENT library)
 install(FILES ${header} DESTINATION "${include_dest}")
+

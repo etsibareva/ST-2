@@ -37,3 +37,4 @@ double Circle::getFerence() const {
 double Circle::getArea() const {
     return area;
 }
+

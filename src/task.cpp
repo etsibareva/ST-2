@@ -10,6 +10,7 @@ double calculateEarthGap() {
     double newFerence = oldFerence + 1.0;
     earth.setFerence(newFerence);
     return earth.getRadius() - earthRadius;
+    
 }
 
 double calculatePoolCost() {

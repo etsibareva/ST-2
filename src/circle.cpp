@@ -5,6 +5,7 @@
 
 Circle::Circle(double r) {
     setRadius(r);
+    
 }
 
 void Circle::setRadius(double r) {

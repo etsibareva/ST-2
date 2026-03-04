@@ -93,8 +93,10 @@ TEST(CircleTest, ConsistencyAfterMultipleSets) {
 
 TEST(CircleTest, MathematicalRelations) {
     Circle c(7.0);
-    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * PI * c.getRadius());
-    EXPECT_DOUBLE_EQ(c.getArea(), PI * c.getRadius() * c.getRadius());
+    EXPECT_DOUBLE_EQ(c.getFerence(), 2 * PI 
+                            * c.getRadius());
+    EXPECT_DOUBLE_EQ(c.getArea(), PI * c.getRadius() 
+                            * c.getRadius());
 }
 
 TEST(EarthGapTest, PositiveGap) {
@@ -122,8 +124,10 @@ TEST(PoolCostTest, PositiveCost) {
 TEST(PoolCostTest, ConcreteArea) {
     Circle pool(3.0);
     Circle poolWithPath(4.0);
-    double expectedPathArea = poolWithPath.getArea() - pool.getArea();
-    double expectedCost = expectedPathArea * 1000.0 + poolWithPath.getFerence() * 2000.0;
+    double expectedPathArea = poolWithPath.getArea() 
+                - pool.getArea();
+    double expectedCost = expectedPathArea * 1000.0 + 
+                poolWithPath.getFerence() * 2000.0;
     EXPECT_DOUBLE_EQ(calculatePoolCost(), expectedCost);
 }
 

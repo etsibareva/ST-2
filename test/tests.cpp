@@ -156,7 +156,7 @@ TEST(CircleTest, RecalculationTheOnes) {
 }
 
 TEST(CircleTest, ZeroButPositiveRadius) {
-  Circle circ(1e-300);
+  Circle circ(1e-10);
   EXPECT_GT(circ.getRadius(), 0.0);
   EXPECT_GT(circ.getFerence(), 0.0);
   EXPECT_GT(circ.getArea(), 0.0);

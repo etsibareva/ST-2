@@ -112,10 +112,10 @@ TEST(CircleTest, FerenceToRadiusToAreaRecalculation) {
   Circle circ(1.0);
   double testFerence = 30.0;
   circ.setFerence(testFerence);
-  
+
   double computedRadius = testFerence / (2 * PI_VAL);
   double computedArea = PI_VAL * computedRadius * computedRadius;
-  
+
   EXPECT_NEAR(circ.getRadius(), computedRadius, EPS_VAL);
   EXPECT_NEAR(circ.getArea(), computedArea, EPS_VAL);
 }
@@ -141,15 +141,15 @@ TEST(CircleTest, RecalculationTheOnes) {
   double origRadius = circ.getRadius();
   double origFerence = circ.getFerence();
   double origArea = circ.getArea();
-  
+
   circ.setRadius(origRadius);
   EXPECT_DOUBLE_EQ(circ.getFerence(), origFerence);
   EXPECT_DOUBLE_EQ(circ.getArea(), origArea);
-  
+
   circ.setFerence(origFerence);
   EXPECT_DOUBLE_EQ(circ.getRadius(), origRadius);
   EXPECT_DOUBLE_EQ(circ.getArea(), origArea);
-  
+
   circ.setArea(origArea);
   EXPECT_DOUBLE_EQ(circ.getRadius(), origRadius);
   EXPECT_DOUBLE_EQ(circ.getFerence(), origFerence);

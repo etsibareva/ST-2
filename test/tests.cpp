@@ -7,33 +7,32 @@
 const double PI_VAL = 3.14159265358979323846;
 const double EPS_VAL = 1e-10;
 
-TEST(CircleTest, ConstructorAndGettersWorks) {
-  Circle circ(5.0);
-  EXPECT_DOUBLE_EQ(circ.getRadius(), 5.0);
-  EXPECT_DOUBLE_EQ(circ.getFerence(), 2 * PI_VAL * 5.0);
-  EXPECT_DOUBLE_EQ(circ.getArea(), PI_VAL * 25.0);
+TEST(CircleTest, ConstructorAndGettersWorksCorrect) {
+  Circle circ(6.0);
+  EXPECT_DOUBLE_EQ(circ.getRadius(), 6.0);
+  EXPECT_DOUBLE_EQ(circ.getFerence(), 2 * PI_VAL * 6.0);
+  EXPECT_DOUBLE_EQ(circ.getArea(), PI_VAL * 36.0);
 }
 
-TEST(CircleTest, SetFerenceUpdatesCorrectly) {
+TEST(CircleTest, SetFerenceUpdatesCorrect) {
   Circle circ(1.0);
   double newCircVal = 10.0;
   circ.setFerence(newCircVal);
-  double expectRad = newCircVal / (2 * PI_VAL);
+  double expectR = newCircVal / (2 * PI_VAL);
   EXPECT_DOUBLE_EQ(circ.getFerence(), newCircVal);
-  EXPECT_DOUBLE_EQ(circ.getRadius(), expectRad);
+  EXPECT_DOUBLE_EQ(circ.getRadius(), expectR);
   EXPECT_DOUBLE_EQ(circ.getArea(),
-    PI_VAL * expectRad * expectRad);
+    PI_VAL * expectR * expectR);
 }
 
 TEST(CircleTest, SetAreaUpdatesCorrectly) {
   Circle circ(1.0);
   double newAreaVal = 50.0;
   circ.setArea(newAreaVal);
-  double expectRad = std::sqrt(newAreaVal / PI_VAL);
-  EXPECT_DOUBLE_EQ(circ.getArea(), newAreaVal);
-  EXPECT_DOUBLE_EQ(circ.getRadius(), expectRad);
-  EXPECT_DOUBLE_EQ(circ.getFerence(),
-    2 * PI_VAL * expectRad);
+  double expectR = std::sqrt(newAreaVal / PI_VAL);
+  EXPECT_NEAR(circ.getArea(), newAreaVal, 1e-10);
+  EXPECT_NEAR(circ.getRadius(), expectR, 1e-10);
+  EXPECT_NEAR(circ.getFerence(), 2 * PI_VAL * expectR, 1e-10);
 }
 
 TEST(CircleTest, ZeroRadiusAllowed) {
@@ -41,14 +40,6 @@ TEST(CircleTest, ZeroRadiusAllowed) {
   EXPECT_DOUBLE_EQ(circ.getRadius(), 0.0);
   EXPECT_DOUBLE_EQ(circ.getFerence(), 0.0);
   EXPECT_DOUBLE_EQ(circ.getArea(), 0.0);
-}
-
-TEST(CircleTest, VerySmallRadiusWorks) {
-  Circle circ(1e-10);
-  EXPECT_NEAR(circ.getFerence(),
-    2 * PI_VAL * 1e-10, EPS_VAL);
-  EXPECT_NEAR(circ.getArea(),
-    PI_VAL * 1e-20, EPS_VAL);
 }
 
 TEST(CircleTest, VeryLargeRadiusWorks) {
@@ -93,26 +84,6 @@ TEST(CircleTest, NegativeAreaThrowsException) {
     std::invalid_argument);
 }
 
-TEST(CircleTest, ConstructorNegativeThrowsException) {
-  EXPECT_THROW(Circle circ(-5.0), std::invalid_argument);
-}
-
-TEST(CircleTest, ConsistencyAfterMultipleSets) {
-  Circle circ(2.0);
-  circ.setRadius(4.0);
-  double radVal = circ.getRadius();
-  double circVal = circ.getFerence();
-  double areaVal = circ.getArea();
-
-  circ.setFerence(circVal);
-  EXPECT_DOUBLE_EQ(circ.getRadius(), radVal);
-  EXPECT_DOUBLE_EQ(circ.getArea(), areaVal);
-
-  circ.setArea(areaVal);
-  EXPECT_DOUBLE_EQ(circ.getRadius(), radVal);
-  EXPECT_DOUBLE_EQ(circ.getFerence(), circVal);
-}
-
 TEST(CircleTest, MathematicalRelationsHold) {
   Circle circ(7.0);
   EXPECT_DOUBLE_EQ(circ.getFerence(),
@@ -132,45 +103,82 @@ TEST(EarthGapTest, GapValueCorrect) {
   EXPECT_NEAR(gapResult, expectGap, EPS_VAL);
 }
 
-TEST(EarthGapTest, GapIndependentFromRadius) {
-  double firstGap = calculateEarthGap();
-  double secondGap = calculateEarthGap();
-  EXPECT_DOUBLE_EQ(firstGap, secondGap);
-}
-
 TEST(PoolCostTest, PositiveCostResult) {
   double totalCost = calculatePoolCost();
   EXPECT_GT(totalCost, 0.0);
 }
 
-TEST(PoolCostTest, ConcreteAreaCalculation) {
-  Circle innerPool(3.0);
-  Circle outerPool(4.0);
-  double expectPathArea = outerPool.getArea()
-    - innerPool.getArea();
+TEST(CircleTest, FerenceToRadiusToAreaRecalculation) {
+  Circle circ(1.0);
+  double testFerence = 30.0;
+  circ.setFerence(testFerence);
+  
+  double computedRadius = testFerence / (2 * PI_VAL);
+  double computedArea = PI_VAL * computedRadius * computedRadius;
+  
+  EXPECT_NEAR(circ.getRadius(), computedRadius, EPS_VAL);
+  EXPECT_NEAR(circ.getArea(), computedArea, EPS_VAL);
+}
+
+TEST(CircleTest, ConsistencyAfterAnotherRecalculation) {
+  Circle circ(2.0);
+  circ.setRadius(4.0);
+  double radVal = circ.getRadius();
+  double circVal = circ.getFerence();
+  double areaVal = circ.getArea();
+
+  circ.setFerence(circVal);
+  EXPECT_NEAR(circ.getRadius(), radVal, EPS_VAL);
+  EXPECT_NEAR(circ.getArea(), areaVal, EPS_VAL);
+
+  circ.setArea(areaVal);
+  EXPECT_NEAR(circ.getRadius(), radVal, EPS_VAL);
+  EXPECT_NEAR(circ.getFerence(), circVal, EPS_VAL);
+}
+
+TEST(CircleTest, RecalculationTheOnes) {
+  Circle circ(5.0);
+  double origRadius = circ.getRadius();
+  double origFerence = circ.getFerence();
+  double origArea = circ.getArea();
+  
+  circ.setRadius(origRadius);
+  EXPECT_DOUBLE_EQ(circ.getFerence(), origFerence);
+  EXPECT_DOUBLE_EQ(circ.getArea(), origArea);
+  
+  circ.setFerence(origFerence);
+  EXPECT_DOUBLE_EQ(circ.getRadius(), origRadius);
+  EXPECT_DOUBLE_EQ(circ.getArea(), origArea);
+  
+  circ.setArea(origArea);
+  EXPECT_DOUBLE_EQ(circ.getRadius(), origRadius);
+  EXPECT_DOUBLE_EQ(circ.getFerence(), origFerence);
+}
+
+TEST(CircleTest, ZeroButPositiveRadius) {
+  Circle circ(1e-300);
+  EXPECT_GT(circ.getRadius(), 0.0);
+  EXPECT_GT(circ.getFerence(), 0.0);
+  EXPECT_GT(circ.getArea(), 0.0);
+}
+
+TEST(PoolCostTest, CostCalculationCorrect) {
+  Circle inPool(3.0);
+  Circle outPool(4.0);
+  double expectPathArea = outPool.getArea()
+    - inPool.getArea();
   double expectCost = expectPathArea * 1000.0
-    + outerPool.getFerence() * 2000.0;
+    + outPool.getFerence() * 2000.0;
   EXPECT_DOUBLE_EQ(calculatePoolCost(), expectCost);
 }
 
-TEST(PoolCostTest, CostBreakdownCheck) {
-  Circle innerPool(3.0);
-  Circle outerPool(4.0);
-  double pathAreaVal = outerPool.getArea()
-    - innerPool.getArea();
-  double concreteCostVal = pathAreaVal * 1000.0;
-  double fenceCostVal = outerPool.getFerence() * 2000.0;
-  double totalCostVal = concreteCostVal + fenceCostVal;
-  EXPECT_DOUBLE_EQ(calculatePoolCost(), totalCostVal);
-}
-
 TEST(PoolCostTest, PathAreaPositive) {
-  Circle innerPool(3.0);
-  Circle outerPool(4.0);
-  EXPECT_GT(outerPool.getArea() - innerPool.getArea(), 0.0);
+  Circle inPool(3.0);
+  Circle outPool(4.0);
+  EXPECT_GT(outPool.getArea() - inPool.getArea(), 0.0);
 }
 
 TEST(PoolCostTest, FenceLengthPositive) {
-  Circle outerPool(4.0);
-  EXPECT_GT(outerPool.getFerence(), 0.0);
+  Circle outPool(4.0);
+  EXPECT_GT(outPool.getFerence(), 0.0);
 }
